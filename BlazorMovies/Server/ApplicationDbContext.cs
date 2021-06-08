@@ -9,10 +9,19 @@ namespace BlazorMovies.Server
 {
     public class ApplicationDbContext : DbContext
     {
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             :base(options)
         {
 
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //Define the composite key of MovieActors
+            modelBuilder.Entity<MoviesActors>().HasKey(x => new { x.MovieId, x.PersonId});
+            modelBuilder.Entity<MoviesGenres>().HasKey(x => new { x.MovieId, x.GenresId });
+
+            base.OnModelCreating(modelBuilder);
         }
         //Tables in our db from entity
         public DbSet<Genre> Genres { get; set; }
